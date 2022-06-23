@@ -4,12 +4,31 @@ import { TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Text } from "rea
 
 const sendText = async (phoneNumber) => {
   // using fetch do a POST to https://dev.stedi.me/twofactorlogin
-  await fetch("https://dev.stedi.me/twofactorlogin/" + phoneNumber, {
-  method: "POST",
-  headers: {
-    "Content-Type": "application/text"
+  const loginResponse = await fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber,{
+    method: 'POST',
+    headers:{
+      'content-type':'application/text'
+    
+  }})
+  const loginResponseText = await loginResponse.text()
+  console.log(loginResponseText);//print the response
+  };
+
+const getToken = async({otp, phoneNumber}) =>{
+  console.log(phoneNumber)
+  console.log(otp)
+  const loginResponse = await fetch('https://dev.stedi.me/twofactorlogin',{
+    method: 'POST',
+    headers:{
+      'content-type':'application/text'
+    
+  }, body:{
+    phoneNumber,
+    otp
   }
 });
+  const token = await loginResponse.text();
+  console.log(token)
 }
 
 const Login = () => {
@@ -24,6 +43,12 @@ const Login = () => {
         value={phoneNumber}
         placeholder="801-555-1212"
       />
+      <TouchableOpacity
+        style={styles.button}
+        onPress={()=>{sendText(phoneNumber)}}
+      >
+        <Text>Get OTP</Text>
+      </TouchableOpacity>
       <TextInput
         style={styles.input}
         onChangeText={setOtp}
@@ -32,15 +57,10 @@ const Login = () => {
         keyboardType="numeric"
         secureTextEntry={true}
       />
+      
       <TouchableOpacity
         style={styles.button}
-        onPress={()=>{sendText(phoneNumber)}}
-      >
-        <Text>Get OTP</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={()=>{sendText(phoneNumber)}}
+        onPress={()=>{getToken({otp, phoneNumber})}}
       >
         <Text>Login</Text>
       </TouchableOpacity>
