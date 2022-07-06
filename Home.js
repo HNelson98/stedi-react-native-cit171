@@ -1,13 +1,20 @@
 import React from 'react';
-import { StyleSheet, Text, View, Image } from 'react-native';
-import { Card, Button } from 'react-native-elements';
+import {View} from 'react-native';
 import Icons from './Icons.js';
 import Bar  from './Bar.js';
 
-const Home = () => {
+const getEmail = async (props) => {
+  const emailResponse = await fetch('https://dev.stedi.me/validate/'+ props.userToken)
+  const emailText = await emailResponse.text()
+  return(
+    loggedInUser = emailText
+  )
+}
+
+const Home = (props) => {
   return (
     <View>
-      <Bar loggedInUser = "billbob@gmail.com"/>
+      <Bar loggedInUser = {getEmail()}/>
       <Icons />
     </View>
   );

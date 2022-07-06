@@ -1,8 +1,8 @@
 import {useState} from "react";
 import { TouchableOpacity, SafeAreaView, StyleSheet, TextInput, Text } from "react-native";
 
-
 const sendText = async (phoneNumber) => {
+  console.log(phoneNumber)
   // using fetch do a POST to https://dev.stedi.me/twofactorlogin
   const loginResponse = await fetch('https://dev.stedi.me/twofactorlogin/'+phoneNumber,{
     method: 'POST',
@@ -14,26 +14,28 @@ const sendText = async (phoneNumber) => {
   console.log(loginResponseText);//print the response
   };
 
-const getToken = async({otp, phoneNumber}) =>{
-  console.log(phoneNumber)
-  console.log(otp)
+const getToken = async({oneTimePassword, phoneNumber, setUserLoggedIn, setUserToken}) =>{
+  
   const loginResponse = await fetch('https://dev.stedi.me/twofactorlogin',{
     method: 'POST',
+    body: JSON.stringify({oneTimePassword, phoneNumber}),
     headers:{
       'content-type':'application/text'
-    
-  }, body:{
-    phoneNumber,
-    otp
-  }
+  },
 });
-  const token = await loginResponse.text();
-  console.log(token)
+  const responseCode = loginResponse.status
+  const loginResponseText = await loginResponse.text()
+  console.log("LOGIN RESPONSE:", loginResponseText)
+  console.log("Response Code:", responseCode)
+  if(responseCode == 200){
+    setUserLoggedIn(true)
+    setUserToken(loginResponseText)
+  }
 }
 
-const Login = () => {
+const Login = (props) => {
   const [phoneNumber, setPhoneNumber] = useState("");
-  const [otp, setOtp] = useState(null);
+  const [oneTimePassword, setoneTimePassword] = useState(null);
 
   return (
     <SafeAreaView style ={styles.mainView}>
@@ -47,12 +49,12 @@ const Login = () => {
         style={styles.button}
         onPress={()=>{sendText(phoneNumber)}}
       >
-        <Text>Get OTP</Text>
+        <Text>Get oneTimePassword</Text>
       </TouchableOpacity>
       <TextInput
         style={styles.input}
-        onChangeText={setOtp}
-        value={otp}
+        onChangeText={setoneTimePassword}
+        value={oneTimePassword}
         placeholder="1234"
         keyboardType="numeric"
         secureTextEntry={true}
@@ -60,7 +62,7 @@ const Login = () => {
       
       <TouchableOpacity
         style={styles.button}
-        onPress={()=>{getToken({otp, phoneNumber})}}
+        onPress={()=>{getToken({oneTimePassword, phoneNumber, setUserLoggedIn:props.setUserLoggedIn, setUserToken:props.setUserToken})}}
       >
         <Text>Login</Text>
       </TouchableOpacity>
