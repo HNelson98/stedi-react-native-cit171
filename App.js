@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import Counter from './Counter.js';
 import SettingsScreen from './SettingsScreen.js';
