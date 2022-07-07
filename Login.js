@@ -43,13 +43,14 @@ const Login = (props) => {
         style={styles.input}
         onChangeText={setPhoneNumber}
         value={phoneNumber}
+        keyboardType="numeric"
         placeholder="801-555-1212"
       />
       <TouchableOpacity
         style={styles.button}
         onPress={()=>{sendText(phoneNumber)}}
       >
-        <Text>Get oneTimePassword</Text>
+        <Text>Get OTP</Text>
       </TouchableOpacity>
       <TextInput
         style={styles.input}

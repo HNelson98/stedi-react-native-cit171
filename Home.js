@@ -1,20 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {View} from 'react-native';
 import Icons from './Icons.js';
 import Bar  from './Bar.js';
 
-const getEmail = async (props) => {
-  const emailResponse = await fetch('https://dev.stedi.me/validate/'+ props.userToken)
-  const emailText = await emailResponse.text()
-  return(
-    loggedInUser = emailText
-  )
-}
+
 
 const Home = (props) => {
+  const [userEmail, setUserEmail] = useState("No Email")
+
+  const getEmail = async (props) => {
+    const emailResponse = await fetch('https://dev.stedi.me/validate/'+ props.userToken)
+    const emailResponseText = await emailResponse.text()
+    setUserEmail(emailResponseText)
+  }
+  
+  getEmail(props)
   return (
     <View>
-      <Bar loggedInUser = {getEmail()}/>
+      <Bar loggedInUser = {userEmail}/>
       <Icons />
     </View>
   );
