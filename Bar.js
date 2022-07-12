@@ -31,8 +31,6 @@ const styles = StyleSheet.create({
         
       },
     email:{
-        width: 90,
         color: "#ffffff",
-
     }
 })
